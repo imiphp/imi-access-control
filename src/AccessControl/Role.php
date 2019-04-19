@@ -2,9 +2,9 @@
 namespace Imi\AC\AccessControl;
 
 use Imi\App;
-use Imi\AC\TAutoInject;
 use Imi\Bean\Annotation\Bean;
 use Imi\Aop\Annotation\Inject;
+use Imi\Bean\Traits\TAutoInject;
 
 /**
  * @Bean("AAA")

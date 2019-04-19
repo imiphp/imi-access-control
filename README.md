@@ -1,15 +1,13 @@
-# imi-rpc
+# imi-access-control
 
-[![Latest Version](https://img.shields.io/packagist/v/imiphp/imi-rpc.svg)](https://packagist.org/packages/imiphp/imi-rpc)
+[![Latest Version](https://img.shields.io/packagist/v/imiphp/imi-access-control.svg)](https://packagist.org/packages/imiphp/imi-access-control)
 [![Php Version](https://img.shields.io/badge/php-%3E=7.1-brightgreen.svg)](https://secure.php.net/)
 [![Swoole Version](https://img.shields.io/badge/swoole-%3E=4.1.0-brightgreen.svg)](https://github.com/swoole/swoole-src)
-[![IMI License](https://img.shields.io/github/license/imiphp/imi-rpc.svg)](https://github.com/imiphp/imi-rpc/blob/master/LICENSE)
+[![IMI License](https://img.shields.io/github/license/imiphp/imi-access-control.svg)](https://github.com/imiphp/imi-access-control/blob/master/LICENSE)
 
 ## 介绍
 
-在 imi 框架中开发 RPC 服务的基础组件。本组件不提供实际的 RPC 实现，仅提供开发 RPC 服务的一些插槽。
-
-`imi-hprose` 基于 `imi-rpc` 实现：https://github.com/imiphp/imi-hprose
+imi 框架的权限控制组件，不提供具体 API、管理界面，仅提供基础操作组件。
 
 ## Composer
 
@@ -18,7 +16,7 @@
 ```json
 {
     "require": {
-        "imiphp/imi-rpc": "~1.0"
+        "imiphp/imi-access-control": "~1.0"
     }
 }
 ```
@@ -33,10 +31,77 @@
 [
     'components'    =>  [
         // 引入本组件
-        'rpc'    =>  'Imi\Rpc',
+        'AccessControl'    =>  'Imi\AC',
     ],
 ]
 ```
+
+### 操作权限
+
+#### 创建操作权限
+
+```php
+use Imi\AC\AccessControl\Operation;
+
+Operation::create('权限名称');
+
+// 权限代码不传或为null，则和权限名称相同，不可重复
+Operation::create('权限名称', '权限代码');
+
+Operation::create('权限名称', '权限代码', '介绍');
+```
+
+### 角色
+
+#### 创建角色
+
+```php
+use Imi\AC\AccessControl\Role;
+
+// 与 Operation::create 一样，不多做说明了
+$role = Role::create('权限名称', '权限代码', '介绍');
+```
+
+#### 获取角色信息
+
+```php
+$role = new Role('权限代码');
+$roleInfo = $role->getRoleInfo(); // $roleInfo->id/code/name/description
+```
+
+#### 获取角色操作权限
+
+```php
+// 数组，成员为 \Imi\AC\Model\Operation 类型
+$operations = $role->getOperations();
+
+// 树形结构，成员为 \Imi\AC\Model\Filter\OperationTreeItem 类型，$item->children 为其下一级角色，同样为 \Imi\AC\Model\Filter\OperationTreeItem 类型
+$operationTree = $role->getOperationTree();
+```
+
+#### 增加、设置权限
+
+```php
+$role->addOperations('code1', 'code2'); // 只在当前基础上增加这两个权限
+
+$role->setOperations('code1', 'code2'); // 将角色权限设置为仅有这两个权限
+```
+
+#### 移除权限
+
+```php
+$role->removeOperations('code1', 'code2');
+```
+
+#### 判断角色是否拥有权限
+
+```php
+$result = $role->hasOperations('code1', 'code2');
+```
+
+### 用户
+
+
 
 ## 免费技术支持
 
@@ -50,10 +115,10 @@ QQ群：17916227 [![点击加群](https://pub.idqqimg.com/wpa/images/group.png "
 
 ## 版权信息
 
-`imi-rpc` 遵循 MIT 开源协议发布，并提供免费使用。
+`imi-access-control` 遵循 MIT 开源协议发布，并提供免费使用。
 
 ## 捐赠
 
-<img src="https://raw.githubusercontent.com/imiphp/imi-rpc/dev/res/pay.png"/>
+<img src="https://raw.githubusercontent.com/imiphp/imi-access-control/dev/res/pay.png"/>
 
 开源不求盈利，多少都是心意，生活不易，随缘随缘……

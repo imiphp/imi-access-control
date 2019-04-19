@@ -44,6 +44,38 @@ class RoleService
     }
 
     /**
+     * 根据id列表查询记录
+     *
+     * @param int $ids
+     * @return \Imi\AC\Model\Role[]
+     */
+    public function selectListByIds($ids)
+    {
+        if(!$ids)
+        {
+            return [];
+        }
+        return Role::query()->whereIn('id', $ids)
+                            ->select()
+                            ->getArray();
+    }
+
+    /**
+     * 根据多个角色获取操作ID
+     *
+     * @param array $codes
+     * @return int[]
+     */
+    public function selectIdsByCodes($codes)
+    {
+        if(!$codes)
+        {
+            return [];
+        }
+        return Role::query()->field('id')->whereIn('code', $codes)->select()->getColumn();
+    }
+
+    /**
      * 创建角色
      *
      * @param string $name

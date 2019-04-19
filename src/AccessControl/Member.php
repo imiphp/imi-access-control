@@ -1,8 +1,13 @@
 <?php
 namespace Imi\AC\AccessControl;
 
+use Imi\Aop\Annotation\Inject;
+use Imi\Bean\Traits\TAutoInject;
+
 class Member
 {
+    use TAutoInject;
+
     /**
      * 用户 ID
      *
@@ -10,9 +15,63 @@ class Member
      */
     private $memberId;
 
+    /**
+     * 角色列表
+     *
+     * @var \Imi\AC\Model\Role[]
+     */
+    private $roles;
+
+    /**
+     * 支持的所有操作权限
+     *
+     * @var \Imi\AC\Model\Operation[]
+     */
+    private $operations;
+
+    /**
+     * @Inject("ACMemberService")
+     *
+     * @var \Imi\AC\Service\MemberService
+     */
+    protected $memberService;
+
     public function __construct($memberId)
     {
+        $this->__autoInject();
         $this->memberId = $memberId;
+        $this->updateRoles();
+        $this->updateOperations();
+    }
+
+    /**
+     * 处理角色的本地数据更新
+     *
+     * @return void
+     */
+    private function updateRoles()
+    {
+        $roles = $this->memberService->getRoles($this->memberId);
+        $this->roles = [];
+        foreach($roles as $role)
+        {
+            $this->roles[$role->code] = $role;
+        }
+    }
+
+    /**
+     * 处理操作的本地数据更新
+     *
+     * @return void
+     */
+    private function updateOperations()
+    {
+        $operations = $this->memberService->getOperations($this->memberId);
+        $this->operations = [];
+        foreach($operations as $operation)
+        {
+            $this->operations[$operation->code] = $operation;
+        }
     }
 
     /**
@@ -32,7 +91,7 @@ class Member
      */
     public function getRoles()
     {
-
+        return array_values($this->roles);
     }
 
     /**
@@ -45,7 +104,9 @@ class Member
      */
     public function addRoles(...$roles)
     {
-
+        $this->memberService->addRoles($this->memberId, ...$roles);
+        $this->updateRoles();
+        $this->updateOperations();
     }
 
     /**
@@ -60,7 +121,9 @@ class Member
      */
     public function setRoles(...$roles)
     {
-
+        $this->memberService->setRoles($this->memberId, ...$roles);
+        $this->updateRoles();
+        $this->updateOperations();
     }
 
     /**
@@ -73,7 +136,9 @@ class Member
      */
     public function removeRoles(...$roles)
     {
-
+        $this->memberService->removeRoles($this->memberId, ...$roles);
+        $this->updateRoles();
+        $this->updateOperations();
     }
 
     /**
@@ -84,7 +149,14 @@ class Member
      */
     public function hasRoles(...$roles)
     {
-
+        foreach($roles as $code)
+        {
+            if(!isset($this->roles[$code]))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -94,7 +166,7 @@ class Member
      */
     public function getOperations()
     {
-
+        return array_values($this->operations);
     }
 
     /**
@@ -107,7 +179,8 @@ class Member
      */
     public function addOperations(...$operations)
     {
-
+        $this->memberService->addOperations($this->memberId, ...$operations);
+        $this->updateOperations();
     }
 
     /**
@@ -122,7 +195,8 @@ class Member
      */
     public function setOperations(...$operations)
     {
-
+        $this->memberService->setOperations($this->memberId, ...$operations);
+        $this->updateOperations();
     }
 
     /**
@@ -135,7 +209,8 @@ class Member
      */
     public function removeOperations(...$operations)
     {
-
+        $this->memberService->removeOperations($this->memberId, ...$operations);
+        $this->updateOperations();
     }
 
     /**
@@ -146,7 +221,14 @@ class Member
      */
     public function hasOperations(...$operations)
     {
-
+        foreach($operations as $code)
+        {
+            if(!isset($this->operations[$code]))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
