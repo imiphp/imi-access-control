@@ -135,10 +135,20 @@ class OperationService
     }
 
     /**
+     * 查询列表
+     *
+     * @return \Imi\AC\Model\Operation[]
+     */
+    public function selectList()
+    {
+        return Operation::select();
+    }
+
+    /**
      * 转为树形
      *
      * @param \Imi\AC\Model\Operation[] $list
-     * @return array
+     * @return \Imi\AC\Model\Filter\OperationTreeItem[]
      */
     public function listToTree($list)
     {
@@ -156,11 +166,11 @@ class OperationService
 		{
 			if(isset($arr2[$item->parentId]))
 			{
-				$arr2[$item->parentId]->children[] = &$arr2[$item->id];
+				$arr2[$item->parentId]->children[] = $arr2[$item->id];
 			}
 			else
 			{
-				$tree[] = &$arr2[$item->id];
+				$tree[] = $arr2[$item->id];
 			}
 		}
 		return $tree;
