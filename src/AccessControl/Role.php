@@ -45,11 +45,20 @@ class Role
      */
     protected $operationService;
 
-    public function __construct($roleCode)
+    public function __construct($pk, $pkType = 'id')
     {
         $this->__autoInject();
-        $this->roleCode = $roleCode;
-        $this->roleInfo = $this->roleService->getByCode($roleCode);
+        switch($pkType)
+        {
+            case 'id':
+                $this->roleInfo = $this->roleService->get($pk);
+                $this->roleCode = $this->roleInfo->code;
+                break;
+            case 'code':
+                $this->roleCode = $pk;
+                $this->roleInfo = $this->roleService->getByCode($pk);
+                break;
+        }
         $this->updateOperations();
     }
 
