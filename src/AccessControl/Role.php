@@ -6,9 +6,6 @@ use Imi\Bean\Annotation\Bean;
 use Imi\Aop\Annotation\Inject;
 use Imi\Bean\Traits\TAutoInject;
 
-/**
- * @Bean("AAA")
- */
 class Role
 {
     use TAutoInject;
