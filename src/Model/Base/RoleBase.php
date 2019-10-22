@@ -2,10 +2,14 @@
 namespace Imi\AC\Model\Base;
 
 use Imi\Model\Model;
+use Imi\Model\Annotation\Table;
 use Imi\Model\Annotation\Column;
+use Imi\Model\Annotation\Entity;
 
 /**
  * RoleBase
+ * @Entity
+ * @Table(name="ac_role", id={"id"})
  * @property int $id 
  * @property string $code 角色代码
  * @property string $name 角色名称
@@ -42,7 +46,8 @@ abstract class RoleBase extends Model
     }
 
     /**
-     * code - 角色代码
+     * 角色代码
+     * code
      * @Column(name="code", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      * @var string
      */
@@ -70,7 +75,8 @@ abstract class RoleBase extends Model
     }
 
     /**
-     * name - 角色名称
+     * 角色名称
+     * name
      * @Column(name="name", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      * @var string
      */
@@ -98,7 +104,8 @@ abstract class RoleBase extends Model
     }
 
     /**
-     * description - 角色介绍
+     * 角色介绍
+     * description
      * @Column(name="description", type="text", length=0, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      * @var string
      */

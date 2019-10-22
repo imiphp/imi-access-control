@@ -2,17 +2,22 @@
 namespace Imi\AC\Model\Base;
 
 use Imi\Model\Model;
+use Imi\Model\Annotation\Table;
 use Imi\Model\Annotation\Column;
+use Imi\Model\Annotation\Entity;
 
 /**
  * MemberOperationRelationBase
+ * @Entity
+ * @Table(name="ac_member_operation_relation", id={"member_id", "operation_id"})
  * @property int $memberId 用户ID
  * @property int $operationId 操作ID
  */
 abstract class MemberOperationRelationBase extends Model
 {
     /**
-     * member_id - 用户ID
+     * 用户ID
+     * member_id
      * @Column(name="member_id", type="int", length=10, accuracy=0, nullable=false, default="", isPrimaryKey=true, primaryKeyIndex=0, isAutoIncrement=false)
      * @var int
      */
@@ -40,7 +45,8 @@ abstract class MemberOperationRelationBase extends Model
     }
 
     /**
-     * operation_id - 操作ID
+     * 操作ID
+     * operation_id
      * @Column(name="operation_id", type="int", length=10, accuracy=0, nullable=false, default="", isPrimaryKey=true, primaryKeyIndex=1, isAutoIncrement=false)
      * @var int
      */

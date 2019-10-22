@@ -2,10 +2,14 @@
 namespace Imi\AC\Model\Base;
 
 use Imi\Model\Model;
+use Imi\Model\Annotation\Table;
 use Imi\Model\Annotation\Column;
+use Imi\Model\Annotation\Entity;
 
 /**
  * OperationBase
+ * @Entity
+ * @Table(name="ac_operation", id={"id"})
  * @property int $id 
  * @property int $parentId 父级ID，顶级为0
  * @property int $index 排序，越小越靠前
@@ -44,7 +48,8 @@ abstract class OperationBase extends Model
     }
 
     /**
-     * parent_id - 父级ID，顶级为0
+     * 父级ID，顶级为0
+     * parent_id
      * @Column(name="parent_id", type="int", length=10, accuracy=0, nullable=false, default="0", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      * @var int
      */
@@ -72,7 +77,8 @@ abstract class OperationBase extends Model
     }
 
     /**
-     * index - 排序，越小越靠前
+     * 排序，越小越靠前
+     * index
      * @Column(name="index", type="tinyint", length=3, accuracy=0, nullable=false, default="0", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      * @var int
      */
@@ -100,7 +106,8 @@ abstract class OperationBase extends Model
     }
 
     /**
-     * code - 操作代码
+     * 操作代码
+     * code
      * @Column(name="code", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      * @var string
      */
@@ -128,7 +135,8 @@ abstract class OperationBase extends Model
     }
 
     /**
-     * name - 操作名称
+     * 操作名称
+     * name
      * @Column(name="name", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      * @var string
      */
@@ -156,7 +164,8 @@ abstract class OperationBase extends Model
     }
 
     /**
-     * description - 操作介绍
+     * 操作介绍
+     * description
      * @Column(name="description", type="text", length=0, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      * @var string
      */

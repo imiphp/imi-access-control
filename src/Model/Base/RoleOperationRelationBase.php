@@ -2,17 +2,22 @@
 namespace Imi\AC\Model\Base;
 
 use Imi\Model\Model;
+use Imi\Model\Annotation\Table;
 use Imi\Model\Annotation\Column;
+use Imi\Model\Annotation\Entity;
 
 /**
  * RoleOperationRelationBase
+ * @Entity
+ * @Table(name="ac_role_operation_relation", id={"role_id", "operation_id"})
  * @property int $roleId 角色ID
  * @property int $operationId 操作ID
  */
 abstract class RoleOperationRelationBase extends Model
 {
     /**
-     * role_id - 角色ID
+     * 角色ID
+     * role_id
      * @Column(name="role_id", type="int", length=10, accuracy=0, nullable=false, default="", isPrimaryKey=true, primaryKeyIndex=0, isAutoIncrement=false)
      * @var int
      */
@@ -40,7 +45,8 @@ abstract class RoleOperationRelationBase extends Model
     }
 
     /**
-     * operation_id - 操作ID
+     * 操作ID
+     * operation_id
      * @Column(name="operation_id", type="int", length=10, accuracy=0, nullable=false, default="", isPrimaryKey=true, primaryKeyIndex=1, isAutoIncrement=false)
      * @var int
      */

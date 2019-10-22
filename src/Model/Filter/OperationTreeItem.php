@@ -2,15 +2,12 @@
 namespace Imi\AC\Model\Filter;
 
 use Imi\AC\Model\Operation;
-use Imi\Model\Annotation\Table;
+use Imi\Bean\Annotation\Inherit;
 use Imi\Model\Annotation\Column;
-use Imi\Model\Annotation\Entity;
-use Imi\Config\Annotation\ConfigValue;
 
 /**
  * OperationTreeItem
- * @Entity
- * @Table(name="ac_operation", id={"id"}, dbPoolName=@ConfigValue("@app.ac.dbPoolname"))
+ * @Inherit
  */
 class OperationTreeItem extends Operation
 {
@@ -28,7 +25,7 @@ class OperationTreeItem extends Operation
      *
      * @return  \Imi\AC\Model\Filter\OperationTreeItem[]
      */ 
-    public function getChildren()
+    public function &getChildren()
     {
         return $this->children;
     }
