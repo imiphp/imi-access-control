@@ -76,6 +76,16 @@ class RoleService
     }
 
     /**
+     * 查询列表
+     *
+     * @return \Imi\AC\Model\Role[]
+     */
+    public function selectList()
+    {
+        return Role::select();
+    }
+
+    /**
      * 创建角色
      *
      * @param string $name
