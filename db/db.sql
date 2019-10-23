@@ -11,7 +11,7 @@
  Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 17/04/2019 17:20:43
+ Date: 23/10/2019 15:08:36
 */
 
 SET NAMES utf8mb4;
@@ -25,6 +25,16 @@ CREATE TABLE `ac_member_operation_relation`  (
   `member_id` int(10) UNSIGNED NOT NULL COMMENT '用户ID',
   `operation_id` int(10) UNSIGNED NOT NULL COMMENT '操作ID',
   PRIMARY KEY (`member_id`, `operation_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for ac_member_role_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `ac_member_role_relation`;
+CREATE TABLE `ac_member_role_relation`  (
+  `member_id` int(10) UNSIGNED NOT NULL COMMENT '用户ID',
+  `role_id` int(10) UNSIGNED NOT NULL COMMENT '角色ID',
+  PRIMARY KEY (`member_id`, `role_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
