@@ -12,6 +12,13 @@ use Imi\AC\Model\Filter\OperationTreeItem;
 class OperationService
 {
     /**
+     * 操作权限模型
+     *
+     * @var string
+     */
+    protected $operationModel = Operation::class;
+
+    /**
      * 获取操作
      *
      * @param int $id
@@ -19,7 +26,7 @@ class OperationService
      */
     public function get($id)
     {
-        return Operation::find($id);
+        return $this->operationModel::find($id);
     }
 
     /**
@@ -34,7 +41,7 @@ class OperationService
      */
     public function create($name, $code = null, $parentId = 0, $index = 0, $description = '')
     {
-        $record = Operation::newInstance();
+        $record = $this->operationModel::newInstance();
         $record->name = $name;
         $record->code = $code ?? $name;
         $record->parentId = $parentId;
@@ -98,7 +105,7 @@ class OperationService
      */
     public function getByCode($code)
     {
-        return Operation::query()->where('code', '=', $code)->select()->get();
+        return $this->operationModel::query()->where('code', '=', $code)->select()->get();
     }
 
     /**
@@ -113,7 +120,7 @@ class OperationService
         {
             return [];
         }
-        return Operation::query()->field('id')->whereIn('code', $codes)->select()->getColumn();
+        return $this->operationModel::query()->field('id')->whereIn('code', $codes)->select()->getColumn();
     }
 
     /**
@@ -128,7 +135,7 @@ class OperationService
         {
             return [];
         }
-        return Operation::query()->whereIn('id', $ids)
+        return $this->operationModel::query()->whereIn('id', $ids)
                                  ->order('index')
                                  ->select()
                                  ->getArray();
@@ -141,7 +148,7 @@ class OperationService
      */
     public function selectList()
     {
-        return Operation::select();
+        return $this->operationModel::select();
     }
 
     /**

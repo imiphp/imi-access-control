@@ -8,6 +8,7 @@ use Imi\Db\Annotation\Transaction;
 use Imi\AC\Model\MemberRoleRelation;
 use Imi\AC\Exception\OperationNotFound;
 use Imi\AC\Model\MemberOperationRelation;
+use Imi\App;
 
 /**
  * @Bean("ACMemberService")
@@ -15,18 +16,48 @@ use Imi\AC\Model\MemberOperationRelation;
 class MemberService
 {
     /**
-     * @Inject("ACRoleService")
+     * 角色服务层名称
      *
+     * @var string
+     */
+    protected $roleServiceBean = 'ACRoleService';
+
+    /**
+     * 操作服务层名称
+     *
+     * @var string
+     */
+    protected $operationServiceBean = 'ACOperationService';
+
+    /**
+     * 用户角色关联模型
+     *
+     * @var string
+     */
+    protected $memberRoleRelationModel = MemberRoleRelation::class;
+
+    /**
+     * 用户操作权限关联模型
+     *
+     * @var string
+     */
+    protected $memberOperationRelationModel = MemberOperationRelation::class;
+
+    /**
      * @var \Imi\AC\Service\RoleService
      */
     protected $roleService;
 
     /**
-     * @Inject("ACOperationService")
-     *
      * @var \Imi\AC\Service\OperationService
      */
     protected $operationService;
+
+    public function __init()
+    {
+        $this->roleService = App::getBean($this->roleServiceBean);
+        $this->operationService = App::getBean($this->operationServiceBean);
+    }
 
     /**
      * 获取用户角色
@@ -36,7 +67,7 @@ class MemberService
      */
     public function getRoles($memberId)
     {
-        $roleIds = MemberRoleRelation::query()->where('member_id', '=', $memberId)
+        $roleIds = $this->memberRoleRelationModel::query()->where('member_id', '=', $memberId)
                                               ->field('role_id')
                                               ->select()
                                               ->getColumn();
@@ -63,7 +94,7 @@ class MemberService
             {
                 throw new RoleNotFound(sprintf('Role code = %s does not found', $roleCode));
             }
-            $relation = MemberRoleRelation::newInstance();
+            $relation = $this->memberRoleRelationModel::newInstance();
             $relation->memberId = $memberId;
             $relation->roleId = $role->id;
             $relation->save();
@@ -85,7 +116,7 @@ class MemberService
      */
     public function setRoles($memberId, ...$roles)
     {
-        MemberRoleRelation::query()->where('member_id', '=', $memberId)->delete();
+        $this->memberRoleRelationModel::query()->where('member_id', '=', $memberId)->delete();
         $this->addRoles($memberId, ...$roles);
     }
 
@@ -105,7 +136,7 @@ class MemberService
         {
             return [];
         }
-        MemberRoleRelation::query()->where('member_id', '=', $memberId)
+        $this->memberRoleRelationModel::query()->where('member_id', '=', $memberId)
                                    ->whereIn('role_id', $roleIds)
                                    ->delete();
     }
@@ -130,7 +161,7 @@ class MemberService
             {
                 throw new OperationNotFound(sprintf('Operation code = %s does not found', $operationCode));
             }
-            $relation = MemberOperationRelation::newInstance();
+            $relation = $this->memberOperationRelationModel::newInstance();
             $relation->memberId = $memberId;
             $relation->operationId = $operation->id;
             $relation->save();
@@ -152,7 +183,7 @@ class MemberService
      */
     public function setOperations($memberId, ...$operations)
     {
-        MemberOperationRelation::query()->where('member_id', '=', $memberId)->delete();
+        $this->memberOperationRelationModel::query()->where('member_id', '=', $memberId)->delete();
         $this->addOperations($memberId, ...$operations);
     }
 
@@ -201,7 +232,7 @@ class MemberService
      */
     public function getOwnOperations($memberId)
     {
-        $operationIds = MemberOperationRelation::query()->where('member_id', '=', $memberId)
+        $operationIds = $this->memberOperationRelationModel::query()->where('member_id', '=', $memberId)
                                                         ->field('operation_id')
                                                         ->select()
                                                         ->getColumn();
@@ -224,7 +255,7 @@ class MemberService
         {
             return [];
         }
-        MemberOperationRelation::query()->where('member_id', '=', $memberId)
+        $this->memberOperationRelationModel::query()->where('member_id', '=', $memberId)
                                         ->whereIn('operation_id', $operationIds)
                                         ->delete();
     }

@@ -2,6 +2,7 @@
 namespace Imi\AC\AccessControl;
 
 use Imi\Aop\Annotation\Inject;
+use Imi\App;
 use Imi\Bean\Traits\TAutoInject;
 
 class Member
@@ -30,8 +31,13 @@ class Member
     private $operations;
 
     /**
-     * @Inject("ACMemberService")
+     * 用户服务层名称
      *
+     * @var string
+     */
+    protected $memberServiceBean = 'ACMemberService';
+
+    /**
      * @var \Imi\AC\Service\MemberService
      */
     protected $memberService;
@@ -39,6 +45,7 @@ class Member
     public function __construct($memberId)
     {
         $this->__autoInject();
+        $this->memberService = App::getBean($this->memberServiceBean);
         $this->memberId = $memberId;
         $this->updateRoles();
         $this->updateOperations();

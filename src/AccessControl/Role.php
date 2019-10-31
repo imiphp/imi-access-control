@@ -32,15 +32,25 @@ class Role
     private $operations;
 
     /**
-     * @Inject("ACRoleService")
-     *
+     * 角色服务层名称
+     * 
+     * @var string
+     */
+    protected $roleServiceBean = 'ACRoleService';
+
+    /**
+     * 操作权限服务层名称
+     * 
+     * @var string
+     */
+    protected $operationServiceBean = 'ACOperationService';
+
+    /**
      * @var \Imi\AC\Service\RoleService
      */
     protected $roleService;
 
     /**
-     * @Inject("ACOperationService")
-     *
      * @var \Imi\AC\Service\OperationService
      */
     protected $operationService;
@@ -48,18 +58,26 @@ class Role
     public function __construct($pk, $pkType = 'id')
     {
         $this->__autoInject();
+        $this->roleService = App::getBean($this->roleServiceBean);
+        $this->operationService = App::getBean($this->operationServiceBean);
         switch($pkType)
         {
             case 'id':
                 $this->roleInfo = $this->roleService->get($pk);
-                $this->roleCode = $this->roleInfo->code;
+                if($this->roleInfo)
+                {
+                    $this->roleCode = $this->roleInfo->code;
+                }
                 break;
             case 'code':
                 $this->roleCode = $pk;
                 $this->roleInfo = $this->roleService->getByCode($pk);
                 break;
         }
-        $this->updateOperations();
+        if($this->roleInfo)
+        {
+            $this->updateOperations();
+        }
     }
 
     /**

@@ -8,6 +8,7 @@ use Imi\AC\Exception\RoleNotFound;
 use Imi\Db\Annotation\Transaction;
 use Imi\AC\Exception\OperationNotFound;
 use Imi\AC\Model\RoleOperationRelation;
+use Imi\App;
 
 /**
  * @Bean("ACRoleService")
@@ -15,11 +16,35 @@ use Imi\AC\Model\RoleOperationRelation;
 class RoleService
 {
     /**
-     * @Inject("ACOperationService")
+     * 角色权限关联模型
      *
+     * @var string
+     */
+    protected $roleOperationRelationModel = RoleOperationRelation::class;
+
+    /**
+     * 角色模型
+     *
+     * @var string
+     */
+    protected $roleModel = Role::class;
+
+    /**
+     * 操作权限服务层名称
+     *
+     * @var string
+     */
+    protected $operationServiceBean = 'ACOperationService';
+
+    /**
      * @var \Imi\AC\Service\OperationService
      */
     protected $operationService;
+
+    public function __init()
+    {
+        $this->operationService = App::getBean($this->operationServiceBean);
+    }
 
     /**
      * 获取角色
@@ -29,7 +54,7 @@ class RoleService
      */
     public function get($id)
     {
-        return Role::find($id);
+        return $this->roleModel::find($id);
     }
 
     /**
@@ -40,7 +65,7 @@ class RoleService
      */
     public function getByCode($code)
     {
-        return Role::query()->where('code', '=', $code)->select()->get();
+        return $this->roleModel::query()->where('code', '=', $code)->select()->get();
     }
 
     /**
@@ -55,7 +80,7 @@ class RoleService
         {
             return [];
         }
-        return Role::query()->whereIn('id', $ids)
+        return $this->roleModel::query()->whereIn('id', $ids)
                             ->select()
                             ->getArray();
     }
@@ -72,7 +97,7 @@ class RoleService
         {
             return [];
         }
-        return Role::query()->field('id')->whereIn('code', $codes)->select()->getColumn();
+        return $this->roleModel::query()->field('id')->whereIn('code', $codes)->select()->getColumn();
     }
 
     /**
@@ -82,7 +107,7 @@ class RoleService
      */
     public function selectList()
     {
-        return Role::select();
+        return $this->roleModel::select();
     }
 
     /**
@@ -95,7 +120,7 @@ class RoleService
      */
     public function create($name, $code = null, $description = '')
     {
-        $record = Role::newInstance();
+        $record = $this->roleModel::newInstance();
         $record->name = $name;
         $record->code = $code ?? $name;
         $record->description = $description;
@@ -165,7 +190,7 @@ class RoleService
             {
                 throw new OperationNotFound(sprintf('Operation code = %s does not found', $operationCode));
             }
-            $relation = RoleOperationRelation::newInstance();
+            $relation = $this->roleOperationRelationModel::newInstance();
             $relation->roleId = $roleId;
             $relation->operationId = $operation->id;
             $relation->save();
@@ -187,7 +212,7 @@ class RoleService
      */
     public function setOperations($roleId, ...$operations)
     {
-        RoleOperationRelation::query()->where('role_id', '=', $roleId)->delete();
+        $this->roleOperationRelationModel::query()->where('role_id', '=', $roleId)->delete();
         $this->addOperations($roleId, ...$operations);
     }
 
@@ -199,7 +224,7 @@ class RoleService
      */
     public function getOperations($roleId)
     {
-        $operationIds = RoleOperationRelation::query()->where('role_id', '=', $roleId)
+        $operationIds = $this->roleOperationRelationModel::query()->where('role_id', '=', $roleId)
                                                       ->field('operation_id')
                                                       ->select()
                                                       ->getColumn();
@@ -222,7 +247,7 @@ class RoleService
         {
             return [];
         }
-        RoleOperationRelation::query()->where('role_id', '=', $roleId)
+        $this->roleOperationRelationModel::query()->where('role_id', '=', $roleId)
                                       ->whereIn('operation_id', $operationIds)
                                       ->delete();
     }
