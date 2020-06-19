@@ -52,7 +52,8 @@ Operation::create('权限名称');
 // 权限代码不传或为null，则和权限名称相同，不可重复
 Operation::create('权限名称', '权限代码');
 
-Operation::create('权限名称', '权限代码', '介绍');
+// 指定父级ID、排序索引
+Operation::create('权限名称', '权限代码', $parentId, $index, '介绍');
 ```
 
 ### 角色
@@ -69,7 +70,9 @@ $role = Role::create('权限名称', '权限代码', '介绍');
 #### 获取角色信息
 
 ```php
-$role = new Role('权限代码');
+// 支持ID、Code两种模式
+$role = new Role('权限ID');
+$role = new Role('权限代码', 'code');
 $roleInfo = $role->getRoleInfo(); // $roleInfo->id/code/name/description
 ```
 
@@ -165,7 +168,6 @@ $member->removeOperations('code1', 'code2');
 ```php
 $result = $member->hasOperations('code1', 'code2');
 ```
-
 
 ## 免费技术支持
 

@@ -38,14 +38,27 @@ class Member
     protected $memberServiceBean = 'ACMemberService';
 
     /**
+     * 操作权限服务层名称
+     * 
+     * @var string
+     */
+    protected $operationServiceBean = 'ACOperationService';
+
+    /**
      * @var \Imi\AC\Service\MemberService
      */
     protected $memberService;
+
+    /**
+     * @var \Imi\AC\Service\OperationService
+     */
+    protected $operationService;
 
     public function __construct($memberId)
     {
         $this->__autoInject();
         $this->memberService = App::getBean($this->memberServiceBean);
+        $this->operationService = App::getBean($this->operationServiceBean);
         $this->memberId = $memberId;
         $this->updateRoles();
         $this->updateOperations();
@@ -174,6 +187,16 @@ class Member
     public function getOperations()
     {
         return array_values($this->operations);
+    }
+
+    /**
+     * 获取操作权限树
+     *
+     * @return \Imi\AC\Model\Filter\OperationTreeItem[]
+     */
+    public function getOperationTree()
+    {
+        return $this->operationService->listToTree($this->operations);
     }
 
     /**
