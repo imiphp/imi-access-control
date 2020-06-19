@@ -35,18 +35,20 @@ class OperationService
      * @param string $name
      * @param string|null $code
      * @param int $parentId
+     * @param int $type
      * @param int $index
      * @param string $title
      * @param string $icon
      * @param string $description
      * @return \Imi\AC\Model\Operation
      */
-    public function create($name, $code = null, $parentId = 0, $index = 0, $title = '', $icon= '', $description = '')
+    public function create($name, $code = null, $parentId = 0, $type = 0 , $index = 0, $title = '', $icon= '', $description = '')
     {
         $record = $this->operationModel::newInstance();
         $record->name = $name;
         $record->code = $code ?? $name;
         $record->parentId = $parentId;
+        $record->type = $type;
         $record->index = $index;
         $record->title = $title;
         $record->icon = $icon;
@@ -66,13 +68,14 @@ class OperationService
      * @param string $name
      * @param string|null $code
      * @param int $parentId
+     * @param int $type
      * @param int $index
      * @param string $title
      * @param string $icon
      * @param string $description
      * @return boolean
      */
-    public function update($id, $name, $code, $parentId = 0, $index = 0, $title = '', $icon= '',$description = '')
+    public function update($id, $name, $code, $parentId = 0, $type = 0, $index = 0, $title = '', $icon= '',$description = '')
     {
         $record = $this->get($id);
         if(!$record)
@@ -82,6 +85,7 @@ class OperationService
         $record->name = $name;
         $record->code = $code;
         $record->parentId = $parentId;
+        $record->type = $type;
         $record->index = $index;
         $record->title = $title;
         $record->icon = $icon;

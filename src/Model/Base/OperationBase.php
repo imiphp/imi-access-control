@@ -12,6 +12,7 @@ use Imi\Model\Annotation\Entity;
  * @Table(name="ac_operation", id={"id"})
  * @property int $id 
  * @property int $parentId 父级ID，顶级为0
+ * @property int $type 类型，0菜单 1api
  * @property int $index 排序，越小越靠前
  * @property string $code 操作代码
  * @property string $name 操作名称
@@ -75,6 +76,35 @@ abstract class OperationBase extends Model
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
+        return $this;
+    }
+
+    /**
+     * type，默认0
+     * type
+     * @Column(name="type", type="int", length=10, accuracy=0, nullable=false, default="0", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
+     * @var int
+     */
+    protected $type;
+
+    /**
+     * 获取 type - 类型，默认0
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * 赋值 type - 类型，默认0
+     * @param int $type type
+     * @return static
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
         return $this;
     }
 
