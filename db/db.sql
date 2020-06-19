@@ -44,6 +44,7 @@ DROP TABLE IF EXISTS `ac_operation`;
 CREATE TABLE `ac_operation`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父级ID，顶级为0',
+  `type` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '类型，默认0',
   `index` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序，越小越靠前',
   `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作代码',
   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作名称',
