@@ -1,4 +1,4 @@
-# imi-access-control
+# imi-access-control-expand
 
 [![Latest Version](https://img.shields.io/packagist/v/imiphp/imi-access-control.svg)](https://packagist.org/packages/imiphp/imi-access-control)
 [![Php Version](https://img.shields.io/badge/php-%3E=7.1-brightgreen.svg)](https://secure.php.net/)
@@ -6,6 +6,7 @@
 [![IMI License](https://img.shields.io/github/license/imiphp/imi-access-control.svg)](https://github.com/imiphp/imi-access-control/blob/master/LICENSE)
 
 ## 介绍
+该项目为imi-access-control扩展版，增加了title,icon 字段方便做成权限菜单
 
 imi 框架的权限控制组件，不提供具体 API、管理界面，仅提供基础操作组件。
 
@@ -20,7 +21,7 @@ imi 框架的权限控制组件，不提供具体 API、管理界面，仅提供
 ```json
 {
     "require": {
-        "imiphp/imi-access-control": "~1.0"
+        "ftlh2005/imi-access-control": "~1.0"
     }
 }
 ```
