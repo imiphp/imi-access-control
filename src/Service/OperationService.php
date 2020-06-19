@@ -36,16 +36,20 @@ class OperationService
      * @param string|null $code
      * @param int $parentId
      * @param int $index
+     * @param string $title
+     * @param string $icon
      * @param string $description
      * @return \Imi\AC\Model\Operation
      */
-    public function create($name, $code = null, $parentId = 0, $index = 0, $description = '')
+    public function create($name, $code = null, $parentId = 0, $index = 0, $title = '', $icon= '', $description = '')
     {
         $record = $this->operationModel::newInstance();
         $record->name = $name;
         $record->code = $code ?? $name;
         $record->parentId = $parentId;
         $record->index = $index;
+        $record->title = $title;
+        $record->icon = $icon;
         $record->description = $description;
         $result = $record->insert();
         if(!$result->isSuccess())
@@ -63,10 +67,12 @@ class OperationService
      * @param string|null $code
      * @param int $parentId
      * @param int $index
+     * @param string $title
+     * @param string $icon
      * @param string $description
      * @return boolean
      */
-    public function update($id, $name, $code, $parentId = 0, $index = 0, $description = '')
+    public function update($id, $name, $code, $parentId = 0, $index = 0, $title = '', $icon= '',$description = '')
     {
         $record = $this->get($id);
         if(!$record)
@@ -77,6 +83,8 @@ class OperationService
         $record->code = $code;
         $record->parentId = $parentId;
         $record->index = $index;
+        $record->title = $title;
+        $record->icon = $icon;
         $record->description = $description;
         return $record->update()->isSuccess();
     }

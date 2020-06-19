@@ -47,6 +47,8 @@ CREATE TABLE `ac_operation`  (
   `index` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序，越小越靠前',
   `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作代码',
   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作名称',
+  `title` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '菜单名称',
+  `icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '字体图标',
   `description` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作介绍',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `code`(`code`) USING BTREE

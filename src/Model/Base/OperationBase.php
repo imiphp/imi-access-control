@@ -15,6 +15,8 @@ use Imi\Model\Annotation\Entity;
  * @property int $index 排序，越小越靠前
  * @property string $code 操作代码
  * @property string $name 操作名称
+ * @property string $title 菜单名称
+ * @property string $icon 字体图标
  * @property string $description 操作介绍
  */
 abstract class OperationBase extends Model
@@ -160,6 +162,64 @@ abstract class OperationBase extends Model
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * 菜单名称
+     * title
+     * @Column(name="title", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
+     * @var string
+     */
+    protected $title;
+
+    /**
+     * 获取 title - 菜单名称
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * 赋值 title - 菜单名称
+     * @param string $title title
+     * @return static
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * 字体图标
+     * icon
+     * @Column(name="icon", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
+     * @var string
+     */
+    protected $icon;
+
+    /**
+     * 获取 icon - 字体图标
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * 赋值 icon - 字体图标
+     * @param string $icon icon
+     * @return static
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
         return $this;
     }
 
