@@ -5,7 +5,7 @@ use Imi\Bean\Annotation\Inherit;
 use Imi\AC\Model\Base\OperationBase;
 
 /**
- * Operation
+ * ac_operation
  * @Inherit
  */
 class Operation extends OperationBase

@@ -5,7 +5,7 @@ use Imi\Bean\Annotation\Inherit;
 use Imi\AC\Model\Base\MemberOperationRelationBase;
 
 /**
- * MemberOperationRelation
+ * ac_member_operation_relation
  * @Inherit
  */
 class MemberOperationRelation extends MemberOperationRelationBase
