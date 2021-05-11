@@ -8,13 +8,15 @@ use Imi\Model\Annotation\Column;
 use Imi\Model\Annotation\DDL;
 use Imi\Model\Annotation\Entity;
 use Imi\Model\Annotation\Table;
-use Imi\Model\Model as Model;
+use Imi\Model\Model;
 
 /**
  * ac_role_operation_relation 基类.
  *
  * @Entity
+ *
  * @Table(name="ac_role_operation_relation", id={"role_id", "operation_id"})
+ *
  * @DDL("CREATE TABLE `ac_role_operation_relation` (   `role_id` int(10) unsigned NOT NULL COMMENT '角色ID',   `operation_id` int(10) unsigned NOT NULL COMMENT '操作ID',   PRIMARY KEY (`role_id`,`operation_id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8")
  *
  * @property int|null $roleId      角色ID
