@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // 注释项代表可省略的，使用默认值
 return [
     // 项目根命名空间
@@ -29,38 +31,54 @@ return [
     'pools'    => [
         // 数据库连接池名：maindb
         'maindb'    => [
-            // 同步池子，task进程使用
-            'sync'    => [
-                'pool'    => [
-                    'class'        => \Imi\Db\Pool\SyncDbPool::class,
-                    'config'       => [
-                        'maxResources'    => 10,
-                        'minResources'    => 0,
-                    ],
-                ],
-                'resource'    => [
-                    'dbClass'     => \Imi\Db\Drivers\PdoMysql\Driver::class,
-                    'host'        => imiGetEnv('MYSQL_SERVER_HOST', '127.0.0.1'),
-                    'username'    => 'root',
-                    'password'    => 'root',
-                    'database'    => 'db_imi_access_control',
+            'pool'    => [
+                'class'        => \Imi\Db\Pool\SyncDbPool::class,
+                'config'       => [
+                    'maxResources'    => 10,
+                    'minResources'    => 0,
                 ],
             ],
-            // 异步池子，worker进程使用
-            'async'    => [
-                'pool'    => [
-                    'class'        => \Imi\Db\Pool\CoroutineDbPool::class,
-                    'config'       => [
-                        'maxResources'    => 10,
-                        'minResources'    => 0,
+            'resource'    => [
+                'dbClass'     => 'PdoMysqlDriver',
+                'host'        => imiGetEnv('MYSQL_SERVER_HOST', '127.0.0.1'),
+                'username'    => 'root',
+                'password'    => 'root',
+                'database'    => 'db_imi_access_control',
+            ],
+        ],
+    ],
+
+    // 日志配置
+    'logger' => [
+        'channels' => [
+            'imi' => [
+                'handlers' => [
+                    [
+                        'class'     => \Imi\Log\Handler\ConsoleHandler::class,
+                        'formatter' => [
+                            'class'     => \Imi\Log\Formatter\ConsoleLineFormatter::class,
+                            'construct' => [
+                                'format'                     => null,
+                                'dateFormat'                 => 'Y-m-d H:i:s',
+                                'allowInlineLineBreaks'      => true,
+                                'ignoreEmptyContextAndExtra' => true,
+                            ],
+                        ],
                     ],
-                ],
-                'resource'    => [
-                    'dbClass'     => \Imi\Db\Drivers\PdoMysql\Driver::class,
-                    'host'        => imiGetEnv('MYSQL_SERVER_HOST', '127.0.0.1'),
-                    'username'    => 'root',
-                    'password'    => 'root',
-                    'database'    => 'db_imi_access_control',
+                    [
+                        'class'     => \Monolog\Handler\RotatingFileHandler::class,
+                        'construct' => [
+                            'filename' => dirname(__DIR__, 2) . '/log.log',
+                        ],
+                        'formatter' => [
+                            'class'     => \Monolog\Formatter\LineFormatter::class,
+                            'construct' => [
+                                'dateFormat'                 => 'Y-m-d H:i:s',
+                                'allowInlineLineBreaks'      => true,
+                                'ignoreEmptyContextAndExtra' => true,
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],

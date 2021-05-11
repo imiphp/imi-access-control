@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Imi\AC\Service;
 
 use Imi\AC\Exception\OperationNotFound;
@@ -17,46 +19,35 @@ class MemberService
 {
     /**
      * 角色服务层名称.
-     *
-     * @var string
      */
-    protected $roleServiceBean = 'ACRoleService';
+    protected string $roleServiceBean = 'ACRoleService';
 
     /**
      * 操作服务层名称.
-     *
-     * @var string
      */
-    protected $operationServiceBean = 'ACOperationService';
+    protected string $operationServiceBean = 'ACOperationService';
 
     /**
      * 用户角色关联模型.
-     *
-     * @var string
      */
-    protected $memberRoleRelationModel = MemberRoleRelation::class;
+    protected string $memberRoleRelationModel = MemberRoleRelation::class;
 
     /**
      * 用户操作权限关联模型.
-     *
-     * @var string
      */
-    protected $memberOperationRelationModel = MemberOperationRelation::class;
+    protected string $memberOperationRelationModel = MemberOperationRelation::class;
 
     /**
      * @var \Imi\AC\Service\RoleService
      */
-    protected $roleService;
+    protected RoleService $roleService;
 
     /**
      * @var \Imi\AC\Service\OperationService
      */
-    protected $operationService;
+    protected OperationService $operationService;
 
-    /**
-     * @return void
-     */
-    public function __init()
+    public function __init(): void
     {
         $this->roleService = App::getBean($this->roleServiceBean);
         $this->operationService = App::getBean($this->operationServiceBean);
@@ -65,11 +56,9 @@ class MemberService
     /**
      * 获取用户角色.
      *
-     * @param int $memberId
-     *
      * @return \Imi\AC\Model\Role[]
      */
-    public function getRoles($memberId)
+    public function getRoles(int $memberId): array
     {
         $roleIds = $this->memberRoleRelationModel::query()->where('member_id', '=', $memberId)
                                               ->field('role_id')
@@ -86,12 +75,9 @@ class MemberService
      *
      * @Transaction
      *
-     * @param int    $memberId
      * @param string ...$roles
-     *
-     * @return void
      */
-    public function addRoles($memberId, ...$roles)
+    public function addRoles(int $memberId, string ...$roles): void
     {
         foreach ($roles as $roleCode)
         {
@@ -116,12 +102,9 @@ class MemberService
      *
      * @Transaction
      *
-     * @param int    $memberId
      * @param string ...$roles
-     *
-     * @return void
      */
-    public function setRoles($memberId, ...$roles)
+    public function setRoles(int $memberId, string ...$roles): void
     {
         $this->memberRoleRelationModel::query()->where('member_id', '=', $memberId)->delete();
         $this->addRoles($memberId, ...$roles);
@@ -132,12 +115,9 @@ class MemberService
      *
      * 传入角色代码
      *
-     * @param int    $memberId
      * @param string ...$roles
-     *
-     * @return void
      */
-    public function removeRoles($memberId, ...$roles)
+    public function removeRoles(int $memberId, string ...$roles): void
     {
         $roleIds = $this->roleService->selectIdsByCodes($roles);
         if (!$roleIds)
@@ -156,12 +136,9 @@ class MemberService
      *
      * @Transaction
      *
-     * @param int    $memberId
      * @param string ...$operations
-     *
-     * @return void
      */
-    public function addOperations($memberId, ...$operations)
+    public function addOperations(int $memberId, string ...$operations): void
     {
         foreach ($operations as $operationCode)
         {
@@ -186,12 +163,9 @@ class MemberService
      *
      * @Transaction
      *
-     * @param int    $memberId
      * @param string ...$operations
-     *
-     * @return void
      */
-    public function setOperations($memberId, ...$operations)
+    public function setOperations(int $memberId, string ...$operations): void
     {
         $this->memberOperationRelationModel::query()->where('member_id', '=', $memberId)->delete();
         $this->addOperations($memberId, ...$operations);
@@ -200,11 +174,9 @@ class MemberService
     /**
      * 获取支持的所有操作权限.
      *
-     * @param int $memberId
-     *
      * @return \Imi\AC\Model\Operation[]
      */
-    public function getOperations($memberId)
+    public function getOperations(int $memberId): array
     {
         $result = [];
         foreach (array_merge($this->getRoleOperations($memberId), $this->getOwnOperations($memberId)) as $operation)
@@ -218,11 +190,9 @@ class MemberService
     /**
      * 获取角色授予当前用户的权限.
      *
-     * @param int $memberId
-     *
      * @return \Imi\AC\Model\Operation[]
      */
-    public function getRoleOperations($memberId)
+    public function getRoleOperations(int $memberId): array
     {
         $roles = $this->getRoles($memberId);
         $result = [];
@@ -241,11 +211,9 @@ class MemberService
     /**
      * 获取当前用户单独被授予的权限.
      *
-     * @param int $memberId
-     *
      * @return \Imi\AC\Model\Operation[]
      */
-    public function getOwnOperations($memberId)
+    public function getOwnOperations(int $memberId): array
     {
         $operationIds = $this->memberOperationRelationModel::query()->where('member_id', '=', $memberId)
                                                         ->field('operation_id')
@@ -260,12 +228,9 @@ class MemberService
      *
      * 传入操作代码
      *
-     * @param int    $memberId
      * @param string ...$operations
-     *
-     * @return void
      */
-    public function removeOperations($memberId, ...$operations)
+    public function removeOperations(int $memberId, string ...$operations): void
     {
         $operationIds = $this->operationService->selectIdsByCodes($operations);
         if (!$operationIds)

@@ -1,10 +1,8 @@
 #!/usr/bin/env php
 <?php
-$imiPath = dirname(__DIR__, 5);
-$loader = require_once $imiPath . '/vendor/autoload.php';
-
-\Imi\App::setLoader($loader);
+$vendor = dirname(__DIR__, 5) . '/vendor/';
+$loader = require_once $vendor . 'autoload.php';
 
 \Imi\App::setDebug(true);
 
-require $imiPath . '/bin/imi.php';
+require $vendor . '../src/Cli/bin/imi-cli';

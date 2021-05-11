@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Imi\AC\Model\Base;
 
 use Imi\Model\Annotation\Column;
@@ -15,8 +17,8 @@ use Imi\Model\Model as Model;
  * @Table(name="ac_member_role_relation", id={"member_id", "role_id"})
  * @DDL("CREATE TABLE `ac_member_role_relation` (   `member_id` int(10) unsigned NOT NULL COMMENT '用户ID',   `role_id` int(10) unsigned NOT NULL COMMENT '角色ID',   PRIMARY KEY (`member_id`,`role_id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8")
  *
- * @property int $memberId 用户ID
- * @property int $roleId   角色ID
+ * @property int|null $memberId 用户ID
+ * @property int|null $roleId   角色ID
  */
 abstract class MemberRoleRelationBase extends Model
 {
@@ -25,17 +27,13 @@ abstract class MemberRoleRelationBase extends Model
      * member_id.
      *
      * @Column(name="member_id", type="int", length=10, accuracy=0, nullable=false, default="", isPrimaryKey=true, primaryKeyIndex=0, isAutoIncrement=false)
-     *
-     * @var int
      */
-    protected $memberId;
+    protected ?int $memberId = null;
 
     /**
      * 获取 memberId - 用户ID.
-     *
-     * @return int
      */
-    public function getMemberId()
+    public function getMemberId(): ?int
     {
         return $this->memberId;
     }
@@ -43,11 +41,11 @@ abstract class MemberRoleRelationBase extends Model
     /**
      * 赋值 memberId - 用户ID.
      *
-     * @param int $memberId member_id
+     * @param int|null $memberId member_id
      *
      * @return static
      */
-    public function setMemberId($memberId)
+    public function setMemberId(?int $memberId)
     {
         $this->memberId = $memberId;
 
@@ -59,17 +57,13 @@ abstract class MemberRoleRelationBase extends Model
      * role_id.
      *
      * @Column(name="role_id", type="int", length=10, accuracy=0, nullable=false, default="", isPrimaryKey=true, primaryKeyIndex=1, isAutoIncrement=false)
-     *
-     * @var int
      */
-    protected $roleId;
+    protected ?int $roleId = null;
 
     /**
      * 获取 roleId - 角色ID.
-     *
-     * @return int
      */
-    public function getRoleId()
+    public function getRoleId(): ?int
     {
         return $this->roleId;
     }
@@ -77,11 +71,11 @@ abstract class MemberRoleRelationBase extends Model
     /**
      * 赋值 roleId - 角色ID.
      *
-     * @param int $roleId role_id
+     * @param int|null $roleId role_id
      *
      * @return static
      */
-    public function setRoleId($roleId)
+    public function setRoleId(?int $roleId)
     {
         $this->roleId = $roleId;
 
