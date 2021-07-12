@@ -1,9 +1,8 @@
 <?php
+
 namespace Imi\AC\AccessControl;
 
 use Imi\App;
-use Imi\Bean\Annotation\Bean;
-use Imi\Aop\Annotation\Inject;
 use Imi\Bean\Traits\TAutoInject;
 
 class Role
@@ -18,29 +17,29 @@ class Role
     private $roleCode;
 
     /**
-     * 角色记录
+     * 角色记录.
      *
-     * @var \Imi\AC\Model\Role
+     * @var \Imi\AC\Model\Role|null
      */
     private $roleInfo;
 
     /**
-     * 支持的所有操作权限
+     * 支持的所有操作权限.
      *
      * @var \Imi\AC\Model\Operation[]
      */
     private $operations;
 
     /**
-     * 角色服务层名称
-     * 
+     * 角色服务层名称.
+     *
      * @var string
      */
     protected $roleServiceBean = 'ACRoleService';
 
     /**
-     * 操作权限服务层名称
-     * 
+     * 操作权限服务层名称.
+     *
      * @var string
      */
     protected $operationServiceBean = 'ACOperationService';
@@ -55,16 +54,20 @@ class Role
      */
     protected $operationService;
 
+    /**
+     * @param mixed  $pk
+     * @param string $pkType
+     */
     public function __construct($pk, $pkType = 'id')
     {
         $this->__autoInject();
         $this->roleService = App::getBean($this->roleServiceBean);
         $this->operationService = App::getBean($this->operationServiceBean);
-        switch($pkType)
+        switch ($pkType)
         {
             case 'id':
                 $this->roleInfo = $this->roleService->get($pk);
-                if($this->roleInfo)
+                if ($this->roleInfo)
                 {
                     $this->roleCode = $this->roleInfo->code;
                 }
@@ -74,14 +77,14 @@ class Role
                 $this->roleInfo = $this->roleService->getByCode($pk);
                 break;
         }
-        if($this->roleInfo)
+        if ($this->roleInfo)
         {
             $this->updateOperations();
         }
     }
 
     /**
-     * 处理操作的本地数据更新
+     * 处理操作的本地数据更新.
      *
      * @return void
      */
@@ -89,14 +92,14 @@ class Role
     {
         $operations = $this->roleService->getOperations($this->roleInfo->id);
         $this->operations = [];
-        foreach($operations as $operation)
+        foreach ($operations as $operation)
         {
             $this->operations[$operation->code] = $operation;
         }
     }
 
     /**
-     * 获取角色记录
+     * 获取角色记录.
      *
      * @return \Imi\AC\Model\Role
      */
@@ -106,17 +109,18 @@ class Role
     }
 
     /**
-     * 创建角色
+     * 创建角色.
      *
      * @param string $name
      * @param string $code
      * @param string $description
+     *
      * @return static|false
      */
     public static function create($name, $code = null, $description = '')
     {
         $record = App::getBean('ACRoleService')->create($name, $code, $description);
-        if($record)
+        if ($record)
         {
             return new static($record->code);
         }
@@ -127,7 +131,7 @@ class Role
     }
 
     /**
-     * 获取支持的所有操作权限
+     * 获取支持的所有操作权限.
      *
      * @return \Imi\AC\Model\Operation[]
      */
@@ -137,7 +141,7 @@ class Role
     }
 
     /**
-     * 获取操作权限树
+     * 获取操作权限树.
      *
      * @return \Imi\AC\Model\Filter\OperationTreeItem[]
      */
@@ -147,11 +151,12 @@ class Role
     }
 
     /**
-     * 增加操作权限
-     * 
+     * 增加操作权限.
+     *
      * 传入操作代码
      *
      * @param string ...$operations
+     *
      * @return void
      */
     public function addOperations(...$operations)
@@ -161,13 +166,14 @@ class Role
     }
 
     /**
-     * 设置操作权限
-     * 
+     * 设置操作权限.
+     *
      * 传入操作代码
-     * 
+     *
      * 调用后，只拥有本次传入的操作权限
-     * 
+     *
      * @param string ...$operations
+     *
      * @return void
      */
     public function setOperations(...$operations)
@@ -177,11 +183,12 @@ class Role
     }
 
     /**
-     * 移除操作权限
+     * 移除操作权限.
      *
      * 传入操作代码
-     * 
+     *
      * @param string ...$operations
+     *
      * @return void
      */
     public function removeOperations(...$operations)
@@ -191,21 +198,22 @@ class Role
     }
 
     /**
-     * 根据操作代码判断，是否拥有一个或多个操作权限
+     * 根据操作代码判断，是否拥有一个或多个操作权限.
      *
      * @param string ...$operations
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasOperations(...$operations)
     {
-        foreach($operations as $code)
+        foreach ($operations as $code)
         {
-            if(!isset($this->operations[$code]))
+            if (!isset($this->operations[$code]))
             {
                 return false;
             }
         }
+
         return true;
     }
-
 }

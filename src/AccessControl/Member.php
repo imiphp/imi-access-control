@@ -1,7 +1,7 @@
 <?php
+
 namespace Imi\AC\AccessControl;
 
-use Imi\Aop\Annotation\Inject;
 use Imi\App;
 use Imi\Bean\Traits\TAutoInject;
 
@@ -10,36 +10,36 @@ class Member
     use TAutoInject;
 
     /**
-     * 用户 ID
+     * 用户 ID.
      *
      * @var int
      */
     private $memberId;
 
     /**
-     * 角色列表
+     * 角色列表.
      *
      * @var \Imi\AC\Model\Role[]
      */
     private $roles;
 
     /**
-     * 支持的所有操作权限
+     * 支持的所有操作权限.
      *
      * @var \Imi\AC\Model\Operation[]
      */
     private $operations;
 
     /**
-     * 用户服务层名称
+     * 用户服务层名称.
      *
      * @var string
      */
     protected $memberServiceBean = 'ACMemberService';
 
     /**
-     * 操作权限服务层名称
-     * 
+     * 操作权限服务层名称.
+     *
      * @var string
      */
     protected $operationServiceBean = 'ACOperationService';
@@ -54,6 +54,9 @@ class Member
      */
     protected $operationService;
 
+    /**
+     * @param int $memberId
+     */
     public function __construct($memberId)
     {
         $this->__autoInject();
@@ -65,7 +68,7 @@ class Member
     }
 
     /**
-     * 处理角色的本地数据更新
+     * 处理角色的本地数据更新.
      *
      * @return void
      */
@@ -73,14 +76,14 @@ class Member
     {
         $roles = $this->memberService->getRoles($this->memberId);
         $this->roles = [];
-        foreach($roles as $role)
+        foreach ($roles as $role)
         {
             $this->roles[$role->code] = $role;
         }
     }
 
     /**
-     * 处理操作的本地数据更新
+     * 处理操作的本地数据更新.
      *
      * @return void
      */
@@ -88,14 +91,14 @@ class Member
     {
         $operations = $this->memberService->getOperations($this->memberId);
         $this->operations = [];
-        foreach($operations as $operation)
+        foreach ($operations as $operation)
         {
             $this->operations[$operation->code] = $operation;
         }
     }
 
     /**
-     * 获取用户 ID
+     * 获取用户 ID.
      *
      * @return int
      */
@@ -105,7 +108,7 @@ class Member
     }
 
     /**
-     * 获取该用户所有角色
+     * 获取该用户所有角色.
      *
      * @return \Imi\AC\Model\Role[]
      */
@@ -115,11 +118,12 @@ class Member
     }
 
     /**
-     * 为用户增加角色
-     * 
+     * 为用户增加角色.
+     *
      * 传入角色代码
      *
      * @param string ...$roles
+     *
      * @return void
      */
     public function addRoles(...$roles)
@@ -130,13 +134,14 @@ class Member
     }
 
     /**
-     * 为用户设置角色
-     * 
+     * 为用户设置角色.
+     *
      * 传入角色代码
-     * 
+     *
      * 调用后，用户只拥有本次传入的角色
-     * 
+     *
      * @param string ...$roles
+     *
      * @return void
      */
     public function setRoles(...$roles)
@@ -147,11 +152,12 @@ class Member
     }
 
     /**
-     * 移除用户的角色
+     * 移除用户的角色.
      *
      * 传入角色代码
-     * 
+     *
      * @param string ...$roles
+     *
      * @return void
      */
     public function removeRoles(...$roles)
@@ -162,25 +168,27 @@ class Member
     }
 
     /**
-     * 根据角色代码判断，该用户是否拥有一个或多个角色
+     * 根据角色代码判断，该用户是否拥有一个或多个角色.
      *
      * @param string ...$roles
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasRoles(...$roles)
     {
-        foreach($roles as $code)
+        foreach ($roles as $code)
         {
-            if(!isset($this->roles[$code]))
+            if (!isset($this->roles[$code]))
             {
                 return false;
             }
         }
+
         return true;
     }
 
     /**
-     * 获取支持的所有操作权限
+     * 获取支持的所有操作权限.
      *
      * @return \Imi\AC\Model\Operation[]
      */
@@ -190,7 +198,7 @@ class Member
     }
 
     /**
-     * 获取操作权限树
+     * 获取操作权限树.
      *
      * @return \Imi\AC\Model\Filter\OperationTreeItem[]
      */
@@ -200,11 +208,12 @@ class Member
     }
 
     /**
-     * 增加操作权限
-     * 
+     * 增加操作权限.
+     *
      * 传入操作代码
      *
      * @param string ...$operations
+     *
      * @return void
      */
     public function addOperations(...$operations)
@@ -214,13 +223,14 @@ class Member
     }
 
     /**
-     * 设置操作权限
-     * 
+     * 设置操作权限.
+     *
      * 传入操作代码
-     * 
+     *
      * 调用后，只拥有本次传入的操作权限
-     * 
+     *
      * @param string ...$operations
+     *
      * @return void
      */
     public function setOperations(...$operations)
@@ -230,11 +240,12 @@ class Member
     }
 
     /**
-     * 移除操作权限
+     * 移除操作权限.
      *
      * 传入操作代码
-     * 
+     *
      * @param string ...$operations
+     *
      * @return void
      */
     public function removeOperations(...$operations)
@@ -244,21 +255,22 @@ class Member
     }
 
     /**
-     * 根据操作代码判断，是否拥有一个或多个操作权限
+     * 根据操作代码判断，是否拥有一个或多个操作权限.
      *
      * @param string ...$operations
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasOperations(...$operations)
     {
-        foreach($operations as $code)
+        foreach ($operations as $code)
         {
-            if(!isset($this->operations[$code]))
+            if (!isset($this->operations[$code]))
             {
                 return false;
             }
         }
+
         return true;
     }
-
 }
