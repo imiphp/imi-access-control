@@ -1,14 +1,14 @@
 <?php
+
 namespace Imi\AC\Service;
 
-use Imi\AC\Model\Role;
-use Imi\Bean\Annotation\Bean;
-use Imi\Aop\Annotation\Inject;
-use Imi\AC\Exception\RoleNotFound;
-use Imi\Db\Annotation\Transaction;
 use Imi\AC\Exception\OperationNotFound;
+use Imi\AC\Exception\RoleNotFound;
+use Imi\AC\Model\Role;
 use Imi\AC\Model\RoleOperationRelation;
 use Imi\App;
+use Imi\Bean\Annotation\Bean;
+use Imi\Db\Annotation\Transaction;
 
 /**
  * @Bean("ACRoleService")
@@ -16,21 +16,21 @@ use Imi\App;
 class RoleService
 {
     /**
-     * 角色权限关联模型
+     * 角色权限关联模型.
      *
      * @var string
      */
     protected $roleOperationRelationModel = RoleOperationRelation::class;
 
     /**
-     * 角色模型
+     * 角色模型.
      *
      * @var string
      */
     protected $roleModel = Role::class;
 
     /**
-     * 操作权限服务层名称
+     * 操作权限服务层名称.
      *
      * @var string
      */
@@ -41,16 +41,20 @@ class RoleService
      */
     protected $operationService;
 
+    /**
+     * @return void
+     */
     public function __init()
     {
         $this->operationService = App::getBean($this->operationServiceBean);
     }
 
     /**
-     * 获取角色
+     * 获取角色.
      *
      * @param int $id
-     * @return \Imi\AC\Model\Role
+     *
+     * @return \Imi\AC\Model\Role|null
      */
     public function get($id)
     {
@@ -58,10 +62,11 @@ class RoleService
     }
 
     /**
-     * 根据代码获取角色
+     * 根据代码获取角色.
      *
      * @param string $code
-     * @return \Imi\AC\Model\Role
+     *
+     * @return \Imi\AC\Model\Role|null
      */
     public function getByCode($code)
     {
@@ -69,39 +74,43 @@ class RoleService
     }
 
     /**
-     * 根据id列表查询记录
+     * 根据id列表查询记录.
      *
      * @param int $ids
+     *
      * @return \Imi\AC\Model\Role[]
      */
     public function selectListByIds($ids)
     {
-        if(!$ids)
+        if (!$ids)
         {
             return [];
         }
+
         return $this->roleModel::query()->whereIn('id', $ids)
                             ->select()
                             ->getArray();
     }
 
     /**
-     * 根据多个角色获取操作ID
+     * 根据多个角色获取操作ID.
      *
      * @param array $codes
+     *
      * @return int[]
      */
     public function selectIdsByCodes($codes)
     {
-        if(!$codes)
+        if (!$codes)
         {
             return [];
         }
+
         return $this->roleModel::query()->field('id')->whereIn('code', $codes)->select()->getColumn();
     }
 
     /**
-     * 查询列表
+     * 查询列表.
      *
      * @return \Imi\AC\Model\Role[]
      */
@@ -111,12 +120,13 @@ class RoleService
     }
 
     /**
-     * 创建角色
+     * 创建角色.
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $code
-     * @param string $description
-     * @return \Imi\AC\Model\Role
+     * @param string      $description
+     *
+     * @return \Imi\AC\Model\Role|false
      */
     public function create($name, $code = null, $description = '')
     {
@@ -125,68 +135,74 @@ class RoleService
         $record->code = $code ?? $name;
         $record->description = $description;
         $result = $record->insert();
-        if(!$result->isSuccess())
+        if (!$result->isSuccess())
         {
             return false;
         }
+
         return $record;
     }
 
     /**
-     * 更新角色
+     * 更新角色.
      *
-     * @param int $id
-     * @param string $name
+     * @param int         $id
+     * @param string      $name
      * @param string|null $code
-     * @param string $description
-     * @return boolean
+     * @param string      $description
+     *
+     * @return bool
      */
     public function update($id, $name, $code, $description = '')
     {
         $record = $this->get($id);
-        if(!$record)
+        if (!$record)
         {
             throw new RoleNotFound(sprintf('Role id = %s does not found', $id));
         }
         $record->name = $name;
         $record->code = $code;
         $record->description = $description;
+
         return $record->update()->isSuccess();
     }
 
     /**
-     * 删除角色
+     * 删除角色.
      *
      * @param int $id
-     * @return void
+     *
+     * @return bool
      */
     public function delete($id)
     {
         $record = $this->get($id);
-        if(!$record)
+        if (!$record)
         {
             throw new RoleNotFound(sprintf('Role id = %s does not found', $id));
         }
+
         return $record->delete()->isSuccess();
     }
 
     /**
-     * 增加操作权限
-     * 
+     * 增加操作权限.
+     *
      * 传入操作代码
-     * 
+     *
      * @Transaction
      *
-     * @param int $roleId
+     * @param int    $roleId
      * @param string ...$operations
+     *
      * @return void
      */
     public function addOperations($roleId, ...$operations)
     {
-        foreach($operations as $operationCode)
+        foreach ($operations as $operationCode)
         {
             $operation = $this->operationService->getByCode($operationCode);
-            if(!$operation)
+            if (!$operation)
             {
                 throw new OperationNotFound(sprintf('Operation code = %s does not found', $operationCode));
             }
@@ -198,16 +214,17 @@ class RoleService
     }
 
     /**
-     * 设置操作权限
-     * 
+     * 设置操作权限.
+     *
      * 传入操作代码
-     * 
+     *
      * 调用后，只拥有本次传入的操作权限
-     * 
+     *
      * @Transaction
-     * 
-     * @param int $roleId
+     *
+     * @param int    $roleId
      * @param string ...$operations
+     *
      * @return void
      */
     public function setOperations($roleId, ...$operations)
@@ -217,9 +234,10 @@ class RoleService
     }
 
     /**
-     * 获取支持的所有操作权限
+     * 获取支持的所有操作权限.
      *
      * @param int $roleId
+     *
      * @return \Imi\AC\Model\Operation[]
      */
     public function getOperations($roleId)
@@ -228,28 +246,29 @@ class RoleService
                                                       ->field('operation_id')
                                                       ->select()
                                                       ->getColumn();
+
         return $this->operationService->selectListByIds($operationIds);
     }
 
     /**
-     * 移除操作权限
+     * 移除操作权限.
      *
      * 传入操作代码
-     * 
-     * @param int $roleId
+     *
+     * @param int    $roleId
      * @param string ...$operations
+     *
      * @return void
      */
     public function removeOperations($roleId, ...$operations)
     {
         $operationIds = $this->operationService->selectIdsByCodes($operations);
-        if(!$operationIds)
+        if (!$operationIds)
         {
-            return [];
+            return;
         }
         $this->roleOperationRelationModel::query()->where('role_id', '=', $roleId)
                                       ->whereIn('operation_id', $operationIds)
                                       ->delete();
     }
-
 }

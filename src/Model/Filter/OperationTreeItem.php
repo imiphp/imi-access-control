@@ -1,4 +1,5 @@
 <?php
+
 namespace Imi\AC\Model\Filter;
 
 use Imi\AC\Model\Operation;
@@ -6,14 +7,17 @@ use Imi\Bean\Annotation\Inherit;
 use Imi\Model\Annotation\Column;
 
 /**
- * OperationTreeItem
+ * OperationTreeItem.
+ *
  * @Inherit
+ *
+ * @property \Imi\AC\Model\Filter\OperationTreeItem[] $children
  */
 class OperationTreeItem extends Operation
 {
     /**
-     * 子操作列表
-     * 
+     * 子操作列表.
+     *
      * @Column(virtual=true)
      *
      * @var \Imi\AC\Model\Filter\OperationTreeItem[]
@@ -21,27 +25,26 @@ class OperationTreeItem extends Operation
     protected $children = [];
 
     /**
-     * Get 子操作列表
+     * Get 子操作列表.
      *
-     * @return  \Imi\AC\Model\Filter\OperationTreeItem[]
-     */ 
+     * @return \Imi\AC\Model\Filter\OperationTreeItem[]
+     */
     public function &getChildren()
     {
         return $this->children;
     }
 
     /**
-     * Set 子操作列表
+     * Set 子操作列表.
      *
-     * @param  \Imi\AC\Model\Filter\OperationTreeItem[]  $children  子操作列表
+     * @param \Imi\AC\Model\Filter\OperationTreeItem[] $children 子操作列表
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setChildren($children)
     {
         $this->children = $children;
 
         return $this;
     }
-
 }
