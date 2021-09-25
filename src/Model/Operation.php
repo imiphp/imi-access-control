@@ -1,14 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Imi\AC\Model;
 
-use Imi\Bean\Annotation\Inherit;
 use Imi\AC\Model\Base\OperationBase;
+use Imi\Bean\Annotation\Inherit;
 
 /**
- * Operation
+ * ac_operation.
+ *
  * @Inherit
  */
 class Operation extends OperationBase
 {
-
 }

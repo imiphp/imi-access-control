@@ -1,285 +1,219 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Imi\AC\Model\Base;
 
-use Imi\Model\Model;
-use Imi\Model\Annotation\Table;
 use Imi\Model\Annotation\Column;
+use Imi\Model\Annotation\DDL;
 use Imi\Model\Annotation\Entity;
+use Imi\Model\Annotation\Table;
+use Imi\Model\Model as Model;
 
 /**
- * OperationBase
+ * ac_operation 基类.
+ *
  * @Entity
  * @Table(name="ac_operation", id={"id"})
- * @property int $id 
- * @property int $parentId 父级ID，顶级为0
- * @property int $type 类型，0菜单 1api
- * @property int $index 排序，越小越靠前
- * @property string $code 操作代码
- * @property string $name 操作名称
- * @property string $title 菜单名称
- * @property string $icon 字体图标
- * @property string $description 操作介绍
+ * @DDL("CREATE TABLE `ac_operation` (   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,   `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父级ID，顶级为0',   `index` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序，越小越靠前',   `code` varchar(32) NOT NULL COMMENT '操作代码',   `name` varchar(32) NOT NULL COMMENT '操作名称',   `description` text NOT NULL COMMENT '操作介绍',   PRIMARY KEY (`id`),   UNIQUE KEY `code` (`code`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8")
+ *
+ * @property int|null    $id
+ * @property int|null    $parentId    父级ID，顶级为0
+ * @property int|null    $index       排序，越小越靠前
+ * @property string|null $code        操作代码
+ * @property string|null $name        操作名称
+ * @property string|null $description 操作介绍
  */
 abstract class OperationBase extends Model
 {
     /**
-     * id
+     * id.
+     *
      * @Column(name="id", type="int", length=10, accuracy=0, nullable=false, default="", isPrimaryKey=true, primaryKeyIndex=0, isAutoIncrement=true)
-     * @var int
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * 获取 id
-     *
-     * @return int
-     */ 
-    public function getId()
+     * 获取 id.
+     */
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * 赋值 id
-     * @param int $id id
+     * 赋值 id.
+     *
+     * @param int|null $id id
+     *
      * @return static
-     */ 
-    public function setId($id)
+     */
+    public function setId(?int $id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     /**
      * 父级ID，顶级为0
-     * parent_id
+     * parent_id.
+     *
      * @Column(name="parent_id", type="int", length=10, accuracy=0, nullable=false, default="0", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
-     * @var int
      */
-    protected $parentId;
+    protected ?int $parentId = null;
 
     /**
-     * 获取 parentId - 父级ID，顶级为0
-     *
-     * @return int
-     */ 
-    public function getParentId()
+     * 获取 parentId - 父级ID，顶级为0.
+     */
+    public function getParentId(): ?int
     {
         return $this->parentId;
     }
 
     /**
-     * 赋值 parentId - 父级ID，顶级为0
-     * @param int $parentId parent_id
+     * 赋值 parentId - 父级ID，顶级为0.
+     *
+     * @param int|null $parentId parent_id
+     *
      * @return static
-     */ 
-    public function setParentId($parentId)
+     */
+    public function setParentId(?int $parentId)
     {
         $this->parentId = $parentId;
-        return $this;
-    }
 
-    /**
-     * type，默认0
-     * type
-     * @Column(name="type", type="int", length=10, accuracy=0, nullable=false, default="0", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
-     * @var int
-     */
-    protected $type;
-
-    /**
-     * 获取 type - 类型，默认0
-     *
-     * @return int
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * 赋值 type - 类型，默认0
-     * @param int $type type
-     * @return static
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
         return $this;
     }
 
     /**
      * 排序，越小越靠前
-     * index
+     * index.
+     *
      * @Column(name="index", type="tinyint", length=3, accuracy=0, nullable=false, default="0", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
-     * @var int
      */
-    protected $index;
+    protected ?int $index = null;
 
     /**
-     * 获取 index - 排序，越小越靠前
-     *
-     * @return int
-     */ 
-    public function getIndex()
+     * 获取 index - 排序，越小越靠前.
+     */
+    public function getIndex(): ?int
     {
         return $this->index;
     }
 
     /**
-     * 赋值 index - 排序，越小越靠前
-     * @param int $index index
+     * 赋值 index - 排序，越小越靠前.
+     *
+     * @param int|null $index index
+     *
      * @return static
-     */ 
-    public function setIndex($index)
+     */
+    public function setIndex(?int $index)
     {
         $this->index = $index;
+
         return $this;
     }
 
     /**
      * 操作代码
-     * code
-     * @Column(name="code", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
-     * @var string
+     * code.
+     *
+     * @Column(name="code", type="varchar", length=60, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      */
-    protected $code;
+    protected ?string $code = null;
 
     /**
      * 获取 code - 操作代码
-     *
-     * @return string
-     */ 
-    public function getCode()
+     */
+    public function getCode(): ?string
     {
         return $this->code;
     }
 
     /**
      * 赋值 code - 操作代码
-     * @param string $code code
+     *
+     * @param string|null $code code
+     *
      * @return static
-     */ 
-    public function setCode($code)
+     */
+    public function setCode(?string $code)
     {
+        if (\is_string($code) && mb_strlen($code) > 60)
+        {
+            throw new \InvalidArgumentException('The maximum length of $code is 60');
+        }
         $this->code = $code;
+
         return $this;
     }
 
     /**
      * 操作名称
-     * name
-     * @Column(name="name", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
-     * @var string
+     * name.
+     *
+     * @Column(name="name", type="varchar", length=60, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
      */
-    protected $name;
+    protected ?string $name = null;
 
     /**
-     * 获取 name - 操作名称
-     *
-     * @return string
-     */ 
-    public function getName()
+     * 获取 name - 操作名称.
+     */
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * 赋值 name - 操作名称
-     * @param string $name name
+     * 赋值 name - 操作名称.
+     *
+     * @param string|null $name name
+     *
      * @return static
-     */ 
-    public function setName($name)
+     */
+    public function setName(?string $name)
     {
+        if (\is_string($name) && mb_strlen($name) > 60)
+        {
+            throw new \InvalidArgumentException('The maximum length of $name is 60');
+        }
         $this->name = $name;
-        return $this;
-    }
 
-    /**
-     * 菜单名称
-     * title
-     * @Column(name="title", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
-     * @var string
-     */
-    protected $title;
-
-    /**
-     * 获取 title - 菜单名称
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * 赋值 title - 菜单名称
-     * @param string $title title
-     * @return static
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-        return $this;
-    }
-
-    /**
-     * 字体图标
-     * icon
-     * @Column(name="icon", type="varchar", length=32, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
-     * @var string
-     */
-    protected $icon;
-
-    /**
-     * 获取 icon - 字体图标
-     *
-     * @return string
-     */
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-
-    /**
-     * 赋值 icon - 字体图标
-     * @param string $icon icon
-     * @return static
-     */
-    public function setIcon($icon)
-    {
-        $this->icon = $icon;
         return $this;
     }
 
     /**
      * 操作介绍
-     * description
+     * description.
+     *
      * @Column(name="description", type="text", length=0, accuracy=0, nullable=false, default="", isPrimaryKey=false, primaryKeyIndex=-1, isAutoIncrement=false)
-     * @var string
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * 获取 description - 操作介绍
-     *
-     * @return string
-     */ 
-    public function getDescription()
+     * 获取 description - 操作介绍.
+     */
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * 赋值 description - 操作介绍
-     * @param string $description description
+     * 赋值 description - 操作介绍.
+     *
+     * @param string|null $description description
+     *
      * @return static
-     */ 
-    public function setDescription($description)
+     */
+    public function setDescription(?string $description)
     {
+        if (\is_string($description) && mb_strlen($description) > 65535)
+        {
+            throw new \InvalidArgumentException('The maximum length of $description is 65535');
+        }
         $this->description = $description;
+
         return $this;
     }
-
 }

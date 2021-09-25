@@ -1,6 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 return [
-    'beanScan'  =>  [
+    'beanScan'  => [
         'Imi\AC\AccessControl',
         'Imi\AC\Model',
         'Imi\AC\Service',

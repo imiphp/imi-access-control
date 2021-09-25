@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Imi\AC\AccessControl;
 
 use Imi\App;
@@ -6,21 +9,10 @@ use Imi\App;
 abstract class Operation
 {
     /**
-     * 创建操作权限
-     *
-     * @param string $name
-     * @param string|null $code
-     * @param int $parentId
-     * @param int $type
-     * @param int $index
-     * @param string $title
-     * @param string $icon
-     * @param string $description
-     * @return \Imi\AC\Model\Operation
+     * 创建操作权限.
      */
-    public static function create($name, $code = null, $parentId = 0, $type = 0, $index = 0, $title = '', $icon = '',$description = '')
+    public static function create(string $name, ?string $code = null, int $parentId = 0, int $index = 0, string $description = ''): \Imi\AC\Model\Operation
     {
-        return App::getBean('ACOperationService')->create($name, $code, $parentId, $type, $index, $title, $icon, $description);
+        return App::getBean('ACOperationService')->create($name, $code, $parentId, $index, $description);
     }
-
 }

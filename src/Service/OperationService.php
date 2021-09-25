@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Imi\AC\Service;
 
-use Imi\Bean\Annotation\Bean;
-use Imi\AC\Model\Operation;
 use Imi\AC\Exception\OperationNotFound;
 use Imi\AC\Model\Filter\OperationTreeItem;
+use Imi\AC\Model\Operation;
+use Imi\Bean\Annotation\Bean;
 
 /**
  * @Bean("ACOperationService")
@@ -12,141 +15,108 @@ use Imi\AC\Model\Filter\OperationTreeItem;
 class OperationService
 {
     /**
-     * 操作权限模型
-     *
-     * @var string
+     * 操作权限模型.
      */
-    protected $operationModel = Operation::class;
+    protected string $operationModel = Operation::class;
 
     /**
-     * 获取操作
-     *
-     * @param int $id
-     * @return \Imi\AC\Model\Operation
+     * 获取操作.
      */
-    public function get($id)
+    public function get(int $id): ?Operation
     {
         return $this->operationModel::find($id);
     }
 
     /**
-     * 创建操作权限
+     * 创建操作权限.
      *
-     * @param string $name
-     * @param string|null $code
-     * @param int $parentId
-     * @param int $type
-     * @param int $index
-     * @param string $title
-     * @param string $icon
-     * @param string $description
-     * @return \Imi\AC\Model\Operation
+     * @return \Imi\AC\Model\Operation|false
      */
-    public function create($name, $code = null, $parentId = 0, $type = 0 , $index = 0, $title = '', $icon= '', $description = '')
+    public function create(string $name, ?string $code = null, int $parentId = 0, int $index = 0, string $description = '')
     {
         $record = $this->operationModel::newInstance();
         $record->name = $name;
         $record->code = $code ?? $name;
         $record->parentId = $parentId;
-        $record->type = $type;
         $record->index = $index;
-        $record->title = $title;
-        $record->icon = $icon;
         $record->description = $description;
         $result = $record->insert();
-        if(!$result->isSuccess())
+        if (!$result->isSuccess())
         {
             return false;
         }
+
         return $record;
     }
 
     /**
-     * 更新操作权限
-     *
-     * @param int $id
-     * @param string $name
-     * @param string|null $code
-     * @param int $parentId
-     * @param int $type
-     * @param int $index
-     * @param string $title
-     * @param string $icon
-     * @param string $description
-     * @return boolean
+     * 更新操作权限.
      */
-    public function update($id, $name, $code, $parentId = 0, $type = 0, $index = 0, $title = '', $icon= '',$description = '')
+    public function update(int $id, string $name, ?string $code, int $parentId = 0, int $index = 0, string $description = ''): bool
     {
         $record = $this->get($id);
-        if(!$record)
+        if (!$record)
         {
             throw new OperationNotFound(sprintf('Operation id = %s does not found', $id));
         }
         $record->name = $name;
         $record->code = $code;
         $record->parentId = $parentId;
-        $record->type = $type;
         $record->index = $index;
-        $record->title = $title;
-        $record->icon = $icon;
         $record->description = $description;
+
         return $record->update()->isSuccess();
     }
 
     /**
-     * 删除操作
-     *
-     * @param int $id
-     * @return void
+     * 删除操作.
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
         $record = $this->get($id);
-        if(!$record)
+        if (!$record)
         {
             throw new OperationNotFound(sprintf('Operation id = %s does not found', $id));
         }
+
         return $record->delete()->isSuccess();
     }
 
     /**
-     * 根据代码获取角色
-     *
-     * @param string $code
-     * @return \Imi\AC\Model\Operation
+     * 根据代码获取角色.
      */
-    public function getByCode($code)
+    public function getByCode(string $code): ?Operation
     {
         return $this->operationModel::query()->where('code', '=', $code)->select()->get();
     }
 
     /**
-     * 根据多个角色获取操作ID
+     * 根据多个角色获取操作ID.
      *
-     * @param array $codes
      * @return int[]
      */
-    public function selectIdsByCodes($codes)
+    public function selectIdsByCodes(array $codes): array
     {
-        if(!$codes)
+        if (!$codes)
         {
             return [];
         }
+
         return $this->operationModel::query()->field('id')->whereIn('code', $codes)->select()->getColumn();
     }
 
     /**
-     * 根据id列表查询记录
+     * 根据id列表查询记录.
      *
-     * @param int $ids
      * @return \Imi\AC\Model\Operation[]
      */
-    public function selectListByIds($ids)
+    public function selectListByIds(array $ids): array
     {
-        if(!$ids)
+        if (!$ids)
         {
             return [];
         }
+
         return $this->operationModel::query()->whereIn('id', $ids)
                                  ->order('index')
                                  ->select()
@@ -154,45 +124,46 @@ class OperationService
     }
 
     /**
-     * 查询列表
+     * 查询列表.
      *
      * @return \Imi\AC\Model\Operation[]
      */
-    public function selectList()
+    public function selectList(): array
     {
         return $this->operationModel::select();
     }
 
     /**
-     * 转为树形
+     * 转为树形.
      *
      * @param \Imi\AC\Model\Operation[] $list
+     *
      * @return \Imi\AC\Model\Filter\OperationTreeItem[]
      */
-    public function listToTree($list)
+    public function listToTree(array $list): array
     {
         $tree = [];
 
-		// 查询出所有分类记录
-		$arr2 = array();
-		// 处理成ID为键名的数组
-		foreach($list as $item)
-		{
-			$arr2[$item->id] = OperationTreeItem::newInstance($item->toArray());
-		}
-		// 循环处理关联列表
-		foreach($arr2 as $item)
-		{
-			if(isset($arr2[$item->parentId]))
-			{
-				$arr2[$item->parentId]->children[] = $arr2[$item->id];
-			}
-			else
-			{
-				$tree[] = $arr2[$item->id];
-			}
-		}
-		return $tree;
-    }
+        // 查询出所有分类记录
+        $arr2 = [];
+        // 处理成ID为键名的数组
+        foreach ($list as $item)
+        {
+            $arr2[$item->id] = OperationTreeItem::newInstance($item->toArray());
+        }
+        // 循环处理关联列表
+        foreach ($arr2 as $item)
+        {
+            if (isset($arr2[$item->parentId]))
+            {
+                $arr2[$item->parentId]->children[] = $arr2[$item->id];
+            }
+            else
+            {
+                $tree[] = $arr2[$item->id];
+            }
+        }
 
+        return $tree;
+    }
 }

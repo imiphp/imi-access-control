@@ -1,18 +1,19 @@
-# imi-access-control-expand
+# imi-access-control
 
 [![Latest Version](https://img.shields.io/packagist/v/imiphp/imi-access-control.svg)](https://packagist.org/packages/imiphp/imi-access-control)
-[![Php Version](https://img.shields.io/badge/php-%3E=7.1-brightgreen.svg)](https://secure.php.net/)
+[![Php Version](https://img.shields.io/badge/php-%3E=7.4-brightgreen.svg)](https://secure.php.net/)
 [![Swoole Version](https://img.shields.io/badge/swoole-%3E=4.1.0-brightgreen.svg)](https://github.com/swoole/swoole-src)
 [![IMI License](https://img.shields.io/github/license/imiphp/imi-access-control.svg)](https://github.com/imiphp/imi-access-control/blob/master/LICENSE)
 
 ## 介绍
-该项目为imi-access-control扩展版，增加了title,icon 字段方便做成权限菜单
 
 imi 框架的权限控制组件，不提供具体 API、管理界面，仅提供基础操作组件。
 
 本组件中支持：角色关联操作，用户关联角色，用于关联操作。
 
 用户除了角色赋予的操作权限以外，还可以单独赋予操作权限。
+
+> 本仓库仅用于浏览，不接受 issue 和 Pull Requests，请前往：<https://github.com/imiphp/imi>
 
 ## Composer
 
@@ -21,7 +22,7 @@ imi 框架的权限控制组件，不提供具体 API、管理界面，仅提供
 ```json
 {
     "require": {
-        "ftlh2005/imi-access-control": "~1.0"
+        "imiphp/imi-access-control": "~2.0.0"
     }
 }
 ```
@@ -176,8 +177,8 @@ QQ群：17916227 [![点击加群](https://pub.idqqimg.com/wpa/images/group.png "
 
 ## 运行环境
 
-- [PHP](https://php.net/) >= 7.1
-- [Composer](https://getcomposer.org/)
+- [PHP](https://php.net/) >= 7.4
+- [Composer](https://getcomposer.org/) >= 2.0
 - [Swoole](https://www.swoole.com/) >= 4.1.0
 
 ## 版权信息
@@ -186,6 +187,6 @@ QQ群：17916227 [![点击加群](https://pub.idqqimg.com/wpa/images/group.png "
 
 ## 捐赠
 
-<img src="https://raw.githubusercontent.com/imiphp/imi-access-control/master/res/pay.png"/>
+<img src="https://cdn.jsdelivr.net/gh/imiphp/imi@2.0/res/pay.png"/>
 
 开源不求盈利，多少都是心意，生活不易，随缘随缘……
